@@ -7,7 +7,9 @@ const { readAsJson, writeToFile } = require('./utilities/utils');
 const { logger } = require('./logger');
 const { authenticationRoutes } = require('./apis/authentication-routes');
 const { signupRoutes } = require('./apis/sign-up-routes');
-const dotenv = require('dotenv')
+const dotenv = require('dotenv');
+const { thoughtsRoutes } = require('./apis/thoughts-routes');
+const { tagsRoutes } = require('./apis/tags-routes');
 dotenv.config();
 const app = express();
 app.use(express.json())
@@ -27,24 +29,28 @@ const counter = (req, res, next) => {
 
 
 const authenticator = (req, res, next) => {
-    let token = req.headers.token;   
-    try{
-        const out = jwt.verify(token,'MySecretReceipe');
+    let token = req.headers.token;
+    try {
+        const out = jwt.verify(token, 'MySecretReceipe');
         next();
-    }catch{
+    } catch {
         res.json('Un Authorized!!!')
     }
 
 }
 
 //url here is a prefix for all child urls
-app.use('/songs',  songsRoutes)
+app.use('/songs', songsRoutes)
 
 app.use('/posts', postRoutes)
 
 app.use('/authenticate', authenticationRoutes)
 
 app.use('/sign-up', signupRoutes)
+
+app.use('/thoughts', thoughtsRoutes)
+
+app.use('/tags', tagsRoutes)
 
 // app.use('/users', usersRoutes)//
 
